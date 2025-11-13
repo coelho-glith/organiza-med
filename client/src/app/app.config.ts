@@ -1,11 +1,8 @@
-import { map, of, take } from 'rxjs';
-
-import { isPlatformBrowser } from '@angular/common';
+import { map, take } from 'rxjs';
 
 import {
   ApplicationConfig,
   inject,
-  PLATFORM_ID,
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
 } from '@angular/core';
@@ -15,9 +12,6 @@ import { provideNotifications } from './components/shared/notificacao/notificaca
 import { AuthService } from './components/auth/auth.service';
 
 const usuarioDesconhecidoGuard: CanActivateFn = () => {
-  const platformId = inject(PLATFORM_ID);
-  if (!isPlatformBrowser(platformId)) return of(true);
-
   const authService = inject(AuthService);
   const router = inject(Router);
 
@@ -28,9 +22,6 @@ const usuarioDesconhecidoGuard: CanActivateFn = () => {
 };
 
 const usuarioAutenticadoGuard: CanActivateFn = () => {
-  const platformId = inject(PLATFORM_ID);
-  if (!isPlatformBrowser(platformId)) return of(true);
-
   const authService = inject(AuthService);
   const router = inject(Router);
 
@@ -50,6 +41,11 @@ const routes: Routes = [
   {
     path: 'inicio',
     loadComponent: () => import('./components/inicio/inicio').then((c) => c.Inicio),
+    canMatch: [usuarioAutenticadoGuard],
+  },
+  {
+    path: 'medicos',
+    loadChildren: () => import('./components/medicos/medico.routes').then((c) => c.medicoRoutes),
     canMatch: [usuarioAutenticadoGuard],
   },
 ];

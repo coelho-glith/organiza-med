@@ -4,7 +4,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 export interface RespostaApiModel {
   sucesso: boolean;
-  dados?: Object;
+  dados?: object;
   erros?: string[];
 }
 
